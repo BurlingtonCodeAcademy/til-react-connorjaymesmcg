@@ -6,9 +6,14 @@ const FactStore = require('./lib/factStore')
 const express = require('express')
 const app = express()
 const port = process.env.PORT || 5000
+const cors = require('cors')
 
-app.use(express.static('static')) // static file server
-app.use(express.urlencoded({extended: true})) // all POST bodies are expected to be URL-encoded
+app.use(cors())
+app.use(express.json()) // process ANY POST request with a header "Content-Type: 'application/json"
+app.use(express.static('build')) // static file server
+app.use(express.urlencoded({ extended: true })) // all POST bodies are expected to be URL-encoded
+
+
 
 const dbUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const store = new FactStore(dbUrl);
@@ -30,7 +35,10 @@ async function getAll(request, response) {
 
 app.post('/facts', addFact);
 
+app.get('/fact/:ObjectID', )
+
 async function addFact(request, response) {
+  console.log(request.body)
   let result = await store.addFact(request.body.text.trim())
   let output = {
     status: 'ok',

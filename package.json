@@ -21,8 +21,9 @@
   "bugs": {
     "url": "https://github.com/BurlingtonCodeAcademy/til/issues"
   },
-  "homepage": "https://github.com/BurlingtonCodeAcademy/til#readme",
+  "proxy": "http://localhost:5000",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "mime": "^2.3.1",
     "mime-types": "^2.1.18",
@@ -30,6 +31,7 @@
     "mongodb": "^3.1.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1"
   },
   "devDependencies": {
