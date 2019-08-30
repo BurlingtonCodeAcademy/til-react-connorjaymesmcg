@@ -37,6 +37,7 @@ class App extends React.Component {
       .then(json => this.setState({ facts: json }))
   }
 
+
   render() {
     return (
       <Router>
@@ -52,7 +53,7 @@ class App extends React.Component {
             </form>
           </Route>
           <Route exact path="/facts" render={() => <FactList facts={this.state.facts} />}></Route>
-          <Route exact path="/fact" render={() => <SingleFact currentFact={this.state.currentFact} />}> </Route>
+          <Route exact path="/fact" render={() => <SingleFact singleFact={this.state.singleFact} />}> </Route>
         </div>
       </Router >
     );
@@ -75,14 +76,19 @@ function FactList(props) {
 }
 
 function SingleFact(props) {
-
   return (
-    props.currentFact.length === 0 ? <p>Fact does not exist!</p> : (
+    props.singleFact.length === 0 ? <p>Fact does not exist!</p> : (
       <div>
+        <h3>Here's your fact!</h3>
+        {props.facts.map((singleFact) => {
+          return <li key={singleFact._id}></li>
+        })}
       </div>
     )
   )
 }
+
+
 
 export default App;
 

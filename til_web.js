@@ -19,6 +19,8 @@ const dbUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const store = new FactStore(dbUrl);
 
 app.get('/facts', getAll);
+app.get('/fact/:ObjectID', getFact)
+app.post('/facts', addFact);
 
 async function getAll(request, response) {
   let cursor = await store.all();
@@ -33,9 +35,20 @@ async function getAll(request, response) {
   });
 }
 
-app.post('/facts', addFact);
 
-app.get('/fact/:ObjectID', )
+async function getFact(request, response) {
+  console.log("getting a fact...", request.params.objectID);
+  let cursor = await store.one(request.params.objectId);
+  let output = [];
+  cursor.forEach((entry) => {
+    output.push(entry);
+  }, function (err) {
+    assert.equal(null, err);
+    console.log("Sending " + output.length + " records to client");
+    response.type('application/json')
+      .send(JSON.stringify(output))
+  });
+}
 
 async function addFact(request, response) {
   console.log(request.body)
