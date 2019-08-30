@@ -21,9 +21,19 @@ class App extends React.Component {
     this.setState({ input: evt.target.value })
   }
 
-  handleSubmit(evt) {
+  async handleSubmit(evt) {
     evt.preventDefault()
     console.log('something')
+    let entry = await fetch("/facts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        fact: this.setState.input
+      })
+    });
+
     // Send the data to the backend, as JSON
     // Change the facts in the state
     //  ---> rerender the components
@@ -42,18 +52,17 @@ class App extends React.Component {
     return (
       <Router>
         <div className="App">
-          <h1>Today I Learned</h1>
+          <h1>Today I Learned!</h1>
           <li><Link to='/'>Go Home</Link></li>
           <li><Link to='/facts'>List all entries (JSON)</Link></li>
           <Route exact path="/">
             <h2>Add a fact</h2>
             <form method="POST" action="/facts">
               <input type="text" name="text" placeholder="Today I learned"></input>
-              <input type="submit"></input>
+              <input onSubmit={this.handleSubmit} type="submit"></input>
             </form>
           </Route>
           <Route exact path="/facts" render={() => <FactList facts={this.state.facts} />}></Route>
-          <Route exact path="/fact" render={() => <SingleFact singleFact={this.state.singleFact} />}> </Route>
         </div>
       </Router >
     );
@@ -64,10 +73,10 @@ function FactList(props) {
   return (
     props.facts.length === 0 ? <p>No facts!</p> : (
       <div>
-        <h3>Facts</h3>
+        <h3>Here Are The Facts:</h3>
         <ul>
           {props.facts.map((fact) => {
-            return <li key={fact._id}>Date: {fact.when} <br /> Fact: {fact.text}<br /></li>
+            return <li key={fact._id}>{new Date(fact.when).toLocaleString()} <br /> <strong>Fact I Learned:</strong> <i>{fact.text}</i><br /> <br /></li>
           })}
         </ul>
       </div>
